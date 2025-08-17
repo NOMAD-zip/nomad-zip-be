@@ -1,0 +1,24 @@
+name: 🧩 feature
+description: 일반 개발/운영 태스크
+title: "[FEAT] 요약을 한 줄로 작성"
+labels: ["✨ Feature"]
+assignees: []
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: 작업 목적/배경
+    validations:
+      required: true
+  - type: textarea
+    id: checklist
+    attributes:
+      label: 할 일(체크리스트)
+      value: |
+        - [ ] 항목 1
+        - [ ] 항목 2
+  - type: input
+    id: due
+    attributes:
+      label: 희망 마감일(있다면)
+      placeholder: YYYY-MM-DD
