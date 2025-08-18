@@ -3,7 +3,6 @@ package com.nz.nomadzip.spot.command.application.mapper;
 import com.nz.nomadzip.client.tourapi.dto.RegionResponse;
 import com.nz.nomadzip.spot.command.domain.entity.Region;
 import org.mapstruct.*;
-import org.springframework.context.annotation.Bean;
 
 @Mapper(
         componentModel = "spring", // 스프링 빈으로 주입!
