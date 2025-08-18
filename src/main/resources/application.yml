@@ -10,9 +10,11 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
-
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: mappers/**/*.xml
+
+open-api:
+  api-key: ${OPEN_API_KEY}
