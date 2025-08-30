@@ -14,9 +14,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class SpotCommandController {
     private final SpotCommandService spotCommandService;
 
+    /* 지역 정보 초기 채우기용 */
     @GetMapping("/region")
     public ResponseEntity<ApiResponse<Void>> fetchRegion(){
         spotCommandService.fetchRegion();
+
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
+
+    @GetMapping("/category")
+    public ResponseEntity<ApiResponse<Void>> fetchCategory(){
+        spotCommandService.fetchCategory();
 
         return ResponseEntity.ok(ApiResponse.success(null));
     }
