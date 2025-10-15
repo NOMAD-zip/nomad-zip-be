@@ -2,7 +2,6 @@ package com.nz.nomadzip.relation.domain;
 
 import com.nz.nomadzip.group.command.domain.entity.Group;
 import com.nz.nomadzip.spot.command.domain.entity.Spot;
-import com.nz.nomadzip.user.command.domain.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 

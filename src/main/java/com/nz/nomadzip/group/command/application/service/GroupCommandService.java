@@ -1,17 +1,12 @@
 package com.nz.nomadzip.group.command.application.service;
 
 import com.nz.nomadzip.group.command.domain.entity.Group;
-import com.nz.nomadzip.group.command.domain.entity.QGroup;
 import com.nz.nomadzip.group.command.mapper.GroupMapper;
 import com.nz.nomadzip.group.command.repository.GroupCommandRepository;
-import com.nz.nomadzip.group.query.repository.GroupQueryRepository;
-import com.nz.nomadzip.group.query.service.GroupQueryService;
-import com.nz.nomadzip.relation.domain.GroupUser;
 import com.nz.nomadzip.relation.service.GroupUserService;
 import com.nz.nomadzip.spot.command.application.dto.request.CreateGroupRequest;
 import com.nz.nomadzip.user.command.domain.entity.User;
 import com.nz.nomadzip.user.query.service.UserQueryService;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

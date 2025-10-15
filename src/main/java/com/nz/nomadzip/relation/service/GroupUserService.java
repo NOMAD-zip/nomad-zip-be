@@ -2,7 +2,6 @@ package com.nz.nomadzip.relation.service;
 
 
 import com.nz.nomadzip.common.exception.BusinessException;
-import com.nz.nomadzip.common.exception.ErrorCode;
 import com.nz.nomadzip.group.command.domain.entity.Group;
 import com.nz.nomadzip.group.exception.GroupErrorCode;
 import com.nz.nomadzip.relation.domain.GroupUser;

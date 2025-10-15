@@ -1,12 +1,9 @@
 package com.nz.nomadzip.group.command.domain.entity;
 
-import com.nz.nomadzip.spot.command.domain.entity.Spot;
-import com.nz.nomadzip.user.command.domain.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "group")
