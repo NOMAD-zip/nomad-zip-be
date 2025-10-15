@@ -24,6 +24,10 @@ public class Group {
      다대다 관계는 중간에 테이블 놓아서 해결하기!
     */
 
+    private String title;
+
+    private String info;
+
     private Date startedAt;
 
     private Date endedAt;
