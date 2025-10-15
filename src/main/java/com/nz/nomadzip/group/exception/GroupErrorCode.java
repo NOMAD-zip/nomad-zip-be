@@ -8,9 +8,9 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public enum _ErrorCode implements ErrorCode {
+public enum GroupErrorCode implements ErrorCode {
     /* ????? 에러코드 할당 */
-    ERROR_CODE("에러 코드 입력", "에러 메시지 입력", HttpStatus.NOT_FOUND);
+    ALREADY_JOIN("71001", "이미 그룹의 멤버입니다.", HttpStatus.BAD_REQUEST);
 
     private final String code;
     private final String message;

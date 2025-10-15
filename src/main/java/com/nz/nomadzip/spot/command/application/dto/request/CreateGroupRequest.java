@@ -14,6 +14,12 @@ public class CreateGroupRequest {
     /* 생성 요청 유저 정보 */
     private Long userId;
 
+    /* 그룹 명칭 */
+    private String title;
+
+    /* 그룹 설명 */
+    private String description;
+
     /* 선택한 관광지 목록 */
     private List<Integer> spotIdList;
 

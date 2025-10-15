@@ -26,7 +26,7 @@ public class Group {
 
     private String title;
 
-    private String info;
+    private String description;
 
     private Date startedAt;
 
