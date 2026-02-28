@@ -1,7 +1,7 @@
 server:
   port: 8080
   servlet:
-    context-path: /api/v1 # /api/v1 ?? ??
+    context-path: /api/v1
 
 spring:
   datasource:
@@ -9,6 +9,18 @@ spring:
     url: jdbc:mariadb://${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+  cache:
+    type: caffeine
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY:}
+      chat:
+        options:
+          model: ${OPENAI_CHAT_MODEL:gpt-4o-mini}
+          temperature: 0.1
+      embedding:
+        options:
+          model: ${OPENAI_EMBEDDING_MODEL:text-embedding-3-small}
 
 mybatis:
   configuration:
@@ -18,3 +30,58 @@ mybatis:
 
 open-api:
   api-key: ${OPEN_API_KEY}
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      queryRewrite:
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 20
+        minimum-number-of-calls: 10
+        permitted-number-of-calls-in-half-open-state: 3
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 20s
+  retry:
+    instances:
+      queryRewrite:
+        max-attempts: 2
+        wait-duration: 400ms
+  timelimiter:
+    instances:
+      queryRewrite:
+        timeout-duration: 3s
+        cancel-running-future: true
+
+recommendation:
+  top-k: 100
+  top-n: 10
+  query-timeout-ms: 3000
+  qdrant:
+    base-url: ${QDRANT_URL:http://localhost:6333}
+    collection: ${QDRANT_COLLECTION:lodging}
+    timeout-ms: 2500
+  cache:
+    ttl-seconds: 180
+    max-size: 1000
+  weights:
+    semantic: 0.45
+    relevance: 0.35
+    rule: 0.20
+  rule-weights:
+    price: 0.35
+    safety: 0.30
+    distance: 0.15
+    rating: 0.20
+  reranker:
+    enabled: ${RERANKER_ENABLED:false}
+    base-url: ${RERANKER_URL:http://localhost:8000}
+    timeout-ms: 3000
+  rate-limit:
+    requests-per-minute: 60
+  dataset:
+    manual-label-path: recommendation/manual_labels_1200.csv
+  accuracy:
+    baseline-ndcg10: 0.600
+    baseline-precision5: 0.700
+    target-ndcg10: 0.660
+    target-precision5: 0.750

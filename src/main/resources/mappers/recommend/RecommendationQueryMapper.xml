@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nz.nomadzip.recommend.mapper.RecommendationQueryMapper">
+
+    <sql id="selectColumns">
+        l.lodging_id AS lodgingId,
+        l.lodging_name AS lodgingName,
+        l.monthly_price AS monthlyPrice,
+        l.capacity AS capacity,
+        l.latitude AS latitude,
+        l.longitude AS longitude,
+        l.address_basic AS addressBasic,
+        l.address_detail AS addressDetail,
+        l.review_total AS reviewTotal,
+        l.summary AS summary,
+        l.description AS description,
+        l.average_rating AS averageRating,
+        l.rule AS rule,
+        COALESCE(GROUP_CONCAT(DISTINCT a.amenity_name SEPARATOR ' '), '') AS amenityText,
+        (
+            SELECT COALESCE(GROUP_CONCAT(DISTINCT t.tag_name SEPARATOR ' '), '')
+            FROM lodging_tag lt
+            INNER JOIN tag t ON t.tag_id = lt.tag_id
+            WHERE lt.lodging_id = l.lodging_id
+        ) AS tagText,
+        CASE
+            WHEN SUM(CASE
+                WHEN LOWER(a.amenity_name) LIKE '%wifi%'
+                     OR LOWER(a.amenity_name) LIKE '%wi-fi%'
+                     OR a.amenity_name LIKE '%와이파이%'
+                THEN 1 ELSE 0 END) > 0
+            THEN TRUE ELSE FALSE
+        END AS wifi,
+        LEAST(1.0,
+              SUM(CASE
+                  WHEN LOWER(a.amenity_name) REGEXP 'cctv|security|safe|alarm|lock|소화기|경비|도어락|안전|fire'
+                  THEN 1 ELSE 0 END) / 3.0
+        ) AS safetyScore
+    </sql>
+
+    <select id="findByLodgingIds" resultType="com.nz.nomadzip.recommend.model.LodgingCandidateDocument">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM lodging l
+        LEFT JOIN lodging_amenity la ON la.lodging_id = l.lodging_id
+        LEFT JOIN amenity a ON a.amenity_id = la.amenity_id
+        WHERE l.lodging_id IN
+        <foreach collection="lodgingIds" item="lodgingId" open="(" separator="," close=")">
+            #{lodgingId}
+        </foreach>
+        GROUP BY l.lodging_id
+    </select>
+
+    <select id="findFallbackCandidates" resultType="com.nz.nomadzip.recommend.model.LodgingCandidateDocument">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM lodging l
+        LEFT JOIN lodging_amenity la ON la.lodging_id = l.lodging_id
+        LEFT JOIN amenity a ON a.amenity_id = la.amenity_id
+        WHERE 1 = 1
+        <if test="priceMax != null">
+            AND l.monthly_price &lt;= #{priceMax}
+        </if>
+        GROUP BY l.lodging_id
+        <if test="wifiOnly != null and wifiOnly">
+            HAVING SUM(CASE
+                WHEN LOWER(a.amenity_name) LIKE '%wifi%'
+                     OR LOWER(a.amenity_name) LIKE '%wi-fi%'
+                     OR a.amenity_name LIKE '%와이파이%'
+                THEN 1 ELSE 0 END) &gt; 0
+        </if>
+        ORDER BY l.average_rating DESC, l.review_total DESC, l.monthly_price ASC
+        LIMIT #{limit}
+    </select>
+
+</mapper>
